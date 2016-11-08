@@ -72,6 +72,21 @@ function toOperations(sortBy, prevFields = []) {
 }
 
 
+function compile(sortBy) {
+  switch (typeof sortBy) {
+    case 'object':
+      if (Array.isArray(sortBy)) {
+        return sortBy;
+      }
+      return toOperations(sortBy);
+    case 'string':
+      return toOperations({ [sortBy]: 1 });
+    default:
+      return toOperations();
+  }
+}
+
+
 function getField(operation, entity) {
   return operation.fields.reduce((prev, field) => prev[field], entity);
 }
@@ -104,7 +119,7 @@ function stableSort(a, b, operation, nextOperations) {
 
 export default function sort(array, sortBy) {
   const elements = array || [];
-  const operations = toOperations(sortBy);
+  const operations = compile(sortBy);
 
   return elements.sort((a, b) => {
     return stableSort(a, b, operations[0], operations.slice(1));
