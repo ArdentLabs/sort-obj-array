@@ -46,6 +46,12 @@ test('Accend string sort', (t) => {
     { name: 'University High School', type: 'High School', population: 5000, active: true },
   ]);
 
+  deeperEqual(t, sort(schools, (a, b) => a.name.localeCompare(b.name)), [
+    { name: 'MIT', type: 'College', population: 0, active: false },
+    { name: 'UCI', type: 'College', population: 100000, active: true },
+    { name: 'University High School', type: 'High School', population: 5000, active: true },
+  ]);
+
   deeperEqual(t, sort(schools, inverse({ name: -1 })), [
     { name: 'MIT', type: 'College', population: 0, active: false },
     { name: 'UCI', type: 'College', population: 100000, active: true },
@@ -55,6 +61,12 @@ test('Accend string sort', (t) => {
 
 test('Descend string sort', (t) => {
   deeperEqual(t, sort(schools, { name: -1 }), [
+    { name: 'University High School', type: 'High School', population: 5000, active: true },
+    { name: 'UCI', type: 'College', population: 100000, active: true },
+    { name: 'MIT', type: 'College', population: 0, active: false },
+  ]);
+
+  deeperEqual(t, sort(schools, (a, b) => b.name.localeCompare(a.name)), [
     { name: 'University High School', type: 'High School', population: 5000, active: true },
     { name: 'UCI', type: 'College', population: 100000, active: true },
     { name: 'MIT', type: 'College', population: 0, active: false },
@@ -74,6 +86,12 @@ test('Accend number sort', (t) => {
     { name: 'UCI', type: 'College', population: 100000, active: true },
   ]);
 
+  deeperEqual(t, sort(schools, (a, b) => a.population - b.population), [
+    { name: 'MIT', type: 'College', population: 0, active: false },
+    { name: 'University High School', type: 'High School', population: 5000, active: true },
+    { name: 'UCI', type: 'College', population: 100000, active: true },
+  ]);
+
   deeperEqual(t, sort(schools, inverse({ population: -1 })), [
     { name: 'MIT', type: 'College', population: 0, active: false },
     { name: 'University High School', type: 'High School', population: 5000, active: true },
@@ -88,6 +106,12 @@ test('Descend number sort', (t) => {
     { name: 'MIT', type: 'College', population: 0, active: false },
   ]);
 
+  deeperEqual(t, sort(schools, (a, b) => b.population - a.population), [
+    { name: 'UCI', type: 'College', population: 100000, active: true },
+    { name: 'University High School', type: 'High School', population: 5000, active: true },
+    { name: 'MIT', type: 'College', population: 0, active: false },
+  ]);
+
   deeperEqual(t, sort(schools, inverse({ population: 1 })), [
     { name: 'UCI', type: 'College', population: 100000, active: true },
     { name: 'University High School', type: 'High School', population: 5000, active: true },
@@ -96,23 +120,35 @@ test('Descend number sort', (t) => {
 });
 
 test('Accend boolean sort', (t) => {
-  deeperEqual(t, sort(schools, { population: 1 }), [
+  deeperEqual(t, sort(schools, { active: 1 }), [
     { name: 'MIT', type: 'College', population: 0, active: false },
-    { name: 'University High School', type: 'High School', population: 5000, active: true },
     { name: 'UCI', type: 'College', population: 100000, active: true },
+    { name: 'University High School', type: 'High School', population: 5000, active: true },
   ]);
 
-  deeperEqual(t, sort(schools, inverse({ population: -1 })), [
+  deeperEqual(t, sort(schools, (a, b) => String(a.active).localeCompare(String(b.active))), [
     { name: 'MIT', type: 'College', population: 0, active: false },
-    { name: 'University High School', type: 'High School', population: 5000, active: true },
     { name: 'UCI', type: 'College', population: 100000, active: true },
+    { name: 'University High School', type: 'High School', population: 5000, active: true },
+  ]);
+
+  deeperEqual(t, sort(schools, inverse({ active: -1 })), [
+    { name: 'MIT', type: 'College', population: 0, active: false },
+    { name: 'UCI', type: 'College', population: 100000, active: true },
+    { name: 'University High School', type: 'High School', population: 5000, active: true },
   ]);
 });
 
 test('Descend boolean sort', (t) => {
-  deeperEqual(t, sort(schools, { population: -1 }), [
+  deeperEqual(t, sort(schools, { active: -1 }), [
     { name: 'UCI', type: 'College', population: 100000, active: true },
     { name: 'University High School', type: 'High School', population: 5000, active: true },
+    { name: 'MIT', type: 'College', population: 0, active: false },
+  ]);
+
+  deeperEqual(t, sort(schools, (a, b) => String(b.name).localeCompare(String(a.name))), [
+    { name: 'University High School', type: 'High School', population: 5000, active: true },
+    { name: 'UCI', type: 'College', population: 100000, active: true },
     { name: 'MIT', type: 'College', population: 0, active: false },
   ]);
 

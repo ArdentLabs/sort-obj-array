@@ -81,6 +81,8 @@ function compile(sortBy) {
       return toOperations(sortBy);
     case 'string':
       return toOperations({ [sortBy]: 1 });
+    case 'function':
+      return [sortBy];
     default:
       return toOperations();
   }
@@ -100,19 +102,35 @@ function compare(a, b) {
 }
 
 
+function getSimilarity(operation, a, b) {
+  switch (typeof operation) {
+    case 'function':
+      return operation(a, b);
+
+    case 'object': {
+      const fieldA = getField(operation, a);
+      const fieldB = getField(operation, b);
+
+      return (operation.order < 0)
+        ? compare(fieldB, fieldA)   // Negative values represent a descend sorting operation.
+        : compare(fieldA, fieldB);  // Positive values represent an ascend sorting operation.
+    }
+
+    default:
+      throw new Error('Operation is required to be a function or an object');
+  }
+}
+
+
 function stableSort(a, b, operation, nextOperations) {
   if (!operation) return 0;
 
-  const fieldA = getField(operation, a);
-  const fieldB = getField(operation, b);
-
-  const similarity = (operation.order < 0)
-    ? compare(fieldB, fieldA)   // Negative values represent a descend sorting operation.
-    : compare(fieldA, fieldB);  // Positive values represent an ascend sorting operation.
+  const similarity = getSimilarity(operation, a, b);
 
   if (similarity === 0 && nextOperations.length) {
     return stableSort(a, b, nextOperations[0], nextOperations.slice(1));
   }
+
   return similarity;
 }
 
