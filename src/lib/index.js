@@ -29,6 +29,10 @@
  * @param  {array} prevFields
  *         Previous field names, used for deep sorting.
  *
+ * @param  {boolean} negate
+ *         Flag to negate the sorting order, used for changing an ascend sort
+ *         operation into a descend sort operation.
+ *
  * @return {array}
  *         An array of sort operations.
  *
@@ -44,7 +48,7 @@
 function toOperations(sortBy, prevFields = []) {
   const result = [];
 
-  if (sortBy) {
+  if (typeof sortBy === 'object' && !Array.isArray(sortBy)) {
     // Fill the result with sort operations
     for (const key of Object.keys(sortBy)) {
       const value = sortBy[key];
@@ -89,7 +93,7 @@ function stableSort(a, b, operation, nextOperations) {
 
   const similarity = (operation.order < 0)
     ? compare(fieldB, fieldA)   // Negative values represent a descend sorting operation.
-    : compare(fieldA, fieldB);  // Positive values represent an accend sorting operation.
+    : compare(fieldA, fieldB);  // Positive values represent an ascend sorting operation.
 
   if (similarity === 0 && nextOperations.length) {
     return stableSort(a, b, nextOperations[0], nextOperations.slice(1));
@@ -106,4 +110,29 @@ export default function sort(array, sortBy) {
     return stableSort(a, b, operations[0], operations.slice(1));
   });
 }
+
+
+export function inverse(sortBy) {
+  const result = {};
+
+  for (const key of Object.keys(sortBy)) {
+    const value = sortBy[key];
+
+    switch (typeof value) {
+      case 'number':
+        result[key] = value * -1;
+        break;
+      case 'object':
+        if (value && !Array.isArray(value)) {
+          result[key] = inverse(value);
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  return result;
+}
+
 

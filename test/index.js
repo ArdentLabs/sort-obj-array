@@ -1,7 +1,7 @@
 import test from 'ava';
 import 'babel-core/register';
 
-import sort from '../src/lib/';
+import sort, { inverse } from '../src/lib/';
 
 
 const _ = undefined;
@@ -37,6 +37,12 @@ test('Undefined argument - sortBy', (t) => {
 
 test('Undefined argument - array', (t) => {
   deeperEqual(t, sort(_, { name: 1 }), []);
+});
+
+test('Inverse sortBy', (t) => {
+  deeperEqual(t, inverse({ name: 1 }), { name: -1 });
+  deeperEqual(t, inverse({ id: -2 }), { id: 2 });
+  deeperEqual(t, inverse({ student: { name: 1 }, id: -2 }), { student: { name: -1 }, id: 2 });
 });
 
 test('Accend string sort', (t) => {
