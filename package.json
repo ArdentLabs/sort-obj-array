@@ -1,6 +1,7 @@
 {
   "name": "sort-obj-array",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "private": true,
   "description": "Sort an array of objects using an intuitive object syntax",
   "main": "lib/index.js",
   "files": [
