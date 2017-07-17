@@ -97,7 +97,7 @@ sort(accounts, {
 
 ## API Reference
 
-####`sort(input : array, params : object) -> array`
+#### `sort(input : array, params : object) -> array`
 
 Sort an array of objects using the specified sorting parameters. Returns an array of objects which has been sorted.
 
@@ -106,7 +106,7 @@ values that specify the ordering. Negative values imply a descending sort operat
 is determined by `abs(value)`.
 
 
-####`inverse(params : object) -> object`
+#### `inverse(params : object) -> object`
 
 A utility function for reversing the type of sorting operation from *ascend* to *descend* and vice-versa. This simply
 negates every value in `params`.
