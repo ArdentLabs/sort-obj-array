@@ -28,8 +28,8 @@ function getSimilarity(operation, a, b) {
       const fieldB = getField(operation, b);
 
       return (operation.order < 0)
-        ? compare(fieldB, fieldA)   // Negative values represent a descend sorting operation.
-        : compare(fieldA, fieldB);  // Positive values represent an ascend sorting operation.
+        ? compare(fieldB, fieldA) // Negative values represent a descend sorting operation.
+        : compare(fieldA, fieldB); // Positive values represent an ascend sorting operation.
     }
 
     default:
